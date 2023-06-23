@@ -1,5 +1,4 @@
 #include "main.h"
-#include <stdarg.h>
 
 /**
  * handle_precision - Handles precision for non-custom conversion specifiers

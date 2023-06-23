@@ -1,6 +1,4 @@
 #include "main.h"
-#include <unistd.h>
-#include <string.h>
 
 /**
  * write_buffered - writes a string to stdout, buffering as much as possible

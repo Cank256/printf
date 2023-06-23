@@ -1,5 +1,4 @@
 #include "main.h"
-#include <stdarg.h>
 /**
  * print_pointer - prints a pointer address in hexadecimal format
  * @ptr: the pointer to print

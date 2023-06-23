@@ -1,5 +1,4 @@
 #include "main.h"
-#include <stdarg.h>
 
 /**
  * format_with_zero_flag - Formats the given value as a string with the 0 flag
