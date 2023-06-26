@@ -9,28 +9,38 @@
 #include <ctype.h>
 #include <unistd.h>
 
-#define BUFFER_SIZE 1024
-
 int _printf(const char *format, ...);
 
-int _putchar(char c);
+void print_integer(int num);
 
-int _print_char(va_list args);
+void print_binary(unsigned int num);
 
-int _print_string(va_list args);
+void prints_specifier(char c, unsigned int num);
 
-int _print_binary(va_list args);
+void print_specifier(char c, unsigned int num);
 
-int _print_decimal(va_list args);
+int _printS(const char *format, ...);
 
-int _print_percent(va_list args);
+int write_buffered(char *str);
 
-int _print_unsigned(va_list args);
+void print_hex(unsigned char num);
 
-int _print_octal(va_list args);
+int _printHex(const char *format, ...);
 
-int _print_hexadecimal(va_list args, int uppercase);
+int print_pointer(void *ptr);
 
-int _print_pointer(va_list args);
+int handle_flags(const char *format, int *i);
+
+void print_number(char format, char length_modifier, long number);
+
+int handle_precision(const char *format, int *start_i, va_list args);
+
+int handle_zero_flag(const char *format, int *i, va_list list, char specifier);
+
+char *format_with_zero_flag(const char *format, int value);
+
+int handle_reversed_string(va_list args);
+
+int handle_width(const char *format, int *i, va_list list);
 
 #endif
