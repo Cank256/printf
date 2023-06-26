@@ -1,22 +1,72 @@
 #include "main.h"
 
-#define BUFFER_SIZE 1024
+/**
+ * _putchar - Prints a single character to stdout
+ * @c: The character to be printed
+ *
+ * Return: Number of characters printed (always 1)
+ */
+int _putchar(char c)
+{
+putchar(c);
+return (1);
+}
 
 /**
- * _printf - prints formatted output to stdout
- * @format: format string
- * Return: input of characters printed
+ * _print_char - Prints a character from variadic arguments
+ * @args: The va_list containing the character argument
+ *
+ * Return: Number of characters printed
+ */
+int _print_char(va_list args)
+{
+char c = (char)va_arg(args, int);
+return (_putchar(c));
+}
+
+/**
+ * _print_string - Prints a string from variadic arguments
+ * @args: The va_list containing the string argument
+ *
+ * Return: Number of characters printed
+ */
+int _print_string(va_list args)
+{
+char *s = va_arg(args, char *);
+int count = 0;
+
+while (*s != '\0')
+{
+count += _putchar(*s);
+s++;
+}
+
+return (count);
+}
+
+/**
+ * _print_percent - Prints a percent symbol
+ * @args: The va_list (unused)
+ *
+ * Return: Number of characters printed (always 1)
+ */
+int _print_percent(va_list args)
+{
+(void)args;
+return (_putchar('%'));
+}
+
+/**
+ * _printf - Custom implementation of printf function
+ * @format: Format string
+ *
+ * Return: Number of characters printed
  */
 int _printf(const char *format, ...)
 {
-int i, j;
-int output = 0;
-int width;
-char padding;
-char specifier = '\0';
-int flag_plus = 0;
-
 va_list args;
+int count = 0;
+
 va_start(args, format);
 
 while (*format != '\0')
@@ -24,159 +74,30 @@ while (*format != '\0')
 if (*format == '%')
 {
 format++;
-
-width = 0;
-padding = ' ';
-
-if (*format == '+' && specifier != 'c' && specifier != 's')
+switch (*format)
 {
-flag_plus = 1;
-format++;
-}
-
-if (*format == ' ' && specifier != 'c' && specifier != 's')
-{
-if (!flag_plus)
-{
-output += putchar(' ');
-}
-format++;
-}
-
-if (padding == '-' && width > 0)
-{
-putchar(*format);
-output++;
-for (i = 1; i < width; i++)
-{
-putchar(' ');
-output++;
-}
-}
-
-if (padding == '0' && width > 0)
-{
-putchar(*format);
-output++;
-for (i = 1; i < width; i++)
-{
-putchar(' ');
-output++;
-}
-}
-
-if (padding == '.' && width > 0)
-{
-putchar(*format);
-output++;
-for (i = 1; i < width; i++)
-{
-putchar(' ');
-output++;
-}
-}
-
-if (*format == 's')
-{
-const char *str = va_arg(args, const char *);
-output += printf("%s", str);
-}
-else if (*format == 'S')
-{
-char *str = va_arg(args, char *);
-while (*str != '\0')
-{
-if (*str == '\n')
-{
-output += printf("\\n");
-}
-else if (isprint(*str))
-{
-output += putchar(*str);
-}
-else
-{
-output += printf("\\x%02X", (unsigned char)*str);
-}
-str++;
-}
-format++;
-}
-else if (*format == 'c')
-{
-int c = va_arg(args, int);
-output += printf("%c", c);
-}
-else if (*format == 'd' || *format == 'i')
-{
-int input = va_arg(args, int);
-output += printf("%d", input);
-}
-else if (*format == 'u')
-{
-unsigned int input = va_arg(args, unsigned int);
-output += printf("%u", input);
-}
-else if (*format == 'o')
-{
-unsigned int input = va_arg(args, unsigned int);
-output += printf("%o", input);
-}
-else if (*format == 'x')
-{
-unsigned int input = va_arg(args, unsigned int);
-output += printf("%x", input);
-}
-else if (*format == 'X')
-{
-unsigned int input = va_arg(args, unsigned int);
-output += printf("%X", input);
-}
-else if (*format == 'p')
-{
-void *ptr = va_arg(args, void *);
-output += printf("%p", ptr);
-}
-else if (*format == 'b')
-{
-unsigned int input = va_arg(args, unsigned int);
-int binary[32], i = 0;
-
-if (input == 0)
-{
-output += printf("%u", input);
-}
-while (input > 0)
-{
-binary[i] = input % 2;
-input /= 2;
-i++;
-}
-for (j = i - 1; j >= 0; j--)
-{
-output += printf("%d", binary[j]);
-}
-}
-else if (*format == 'r')
-{
-output += printf("%%r");
-}
-else if (*format == '%')
-{
-output += printf("%%");
-}
-else
-{
-output += printf("%s", format);
+case 'c':
+count += _print_char(args);
+break;
+case 's':
+count += _print_string(args);
+break;
+case '%':
+count += _print_percent(args);
+break;
+default:
+count += _putchar('%');
+count += _putchar(*format);
+break;
 }
 }
 else
 {
-putchar(*format);
-output++;
+count += _putchar(*format);
 }
 format++;
 }
+
 va_end(args);
-return (output);
+return (count);
 }
