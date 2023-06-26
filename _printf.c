@@ -1,62 +1,6 @@
 #include "main.h"
 
 /**
- * _putchar - Prints a single character to stdout
- * @c: The character to be printed
- *
- * Return: Number of characters printed (always 1)
- */
-int _putchar(char c)
-{
-putchar(c);
-return (1);
-}
-
-/**
- * _print_char - Prints a character from variadic arguments
- * @args: The va_list containing the character argument
- *
- * Return: Number of characters printed
- */
-int _print_char(va_list args)
-{
-char c = (char)va_arg(args, int);
-return (_putchar(c));
-}
-
-/**
- * _print_string - Prints a string from variadic arguments
- * @args: The va_list containing the string argument
- *
- * Return: Number of characters printed
- */
-int _print_string(va_list args)
-{
-char *s = va_arg(args, char *);
-int count = 0;
-
-while (*s != '\0')
-{
-count += _putchar(*s);
-s++;
-}
-
-return (count);
-}
-
-/**
- * _print_percent - Prints a percent symbol
- * @args: The va_list (unused)
- *
- * Return: Number of characters printed (always 1)
- */
-int _print_percent(va_list args)
-{
-(void)args;
-return (_putchar('%'));
-}
-
-/**
  * _printf - Custom implementation of printf function
  * @format: Format string
  *
@@ -66,6 +10,9 @@ int _printf(const char *format, ...)
 {
 va_list args;
 int count = 0;
+int plus_flag = 0;
+int space_flag = 0;
+int hash_flag = 0;
 
 va_start(args, format);
 
@@ -74,6 +21,19 @@ while (*format != '\0')
 if (*format == '%')
 {
 format++;
+
+while (*format == '+' || *format == ' ' || *format == '#')
+{
+if (*format == '+')
+plus_flag = 1;
+else if (*format == ' ')
+space_flag = 1;
+else if (*format == '#')
+hash_flag = 1;
+
+format++;
+}
+
 switch (*format)
 {
 case 'c':
@@ -82,6 +42,28 @@ break;
 case 's':
 count += _print_string(args);
 break;
+case 'b':
+count += _print_binary(args);
+break;
+case 'd':
+case 'i':
+count += _print_decimal(args);
+break;
+case 'u':
+count += _print_unsigned(args);
+break;
+case 'o':
+count += _print_octal(args);
+break;
+case 'x':
+count += _print_hexadecimal(args, 0);
+break;
+case 'X':
+count += _print_hexadecimal(args, 1);
+break;
+case 'p':
+count += _print_pointer(args);
+break;
 case '%':
 count += _print_percent(args);
 break;
@@ -89,6 +71,19 @@ default:
 count += _putchar('%');
 count += _putchar(*format);
 break;
+}
+
+if (plus_flag && (*format == 'd' || *format == 'i'))
+count += _putchar('+');
+else if (space_flag && (*format == 'd' || *format == 'i'))
+count += _putchar(' ');
+
+if (hash_flag && (*format == 'x' || *format == 'X' || *format == 'o'))
+{
+if (*format == 'x' || *format == 'X')
+count += _putchar('0') + _putchar(*format);
+else if (*format == 'o')
+count += _putchar('0');
 }
 }
 else
